@@ -1,6 +1,4 @@
 class Pongogo < Formula
-  include Language::Python::Virtualenv
-
   desc "AI agent knowledge routing for Claude Code"
   homepage "https://pongogo.com"
   url "https://files.pythonhosted.org/packages/b4/ae/577ebb0d225fd1ea1252f4abe5baa176398e02eeb2e20d7bb8e1ce78041c/pongogo-0.2.3.tar.gz"
@@ -10,7 +8,16 @@ class Pongogo < Formula
   depends_on "python@3.12"
 
   def install
-    virtualenv_install_with_resources
+    python3 = "python3.12"
+    
+    # Create virtualenv
+    system python3, "-m", "venv", libexec
+    
+    # Install package with all dependencies from PyPI
+    system libexec/"bin/pip", "install", "pongogo==#{version}"
+    
+    # Link the entry point scripts to bin
+    bin.install_symlink Dir[libexec/"bin/pongogo*"]
   end
 
   test do
