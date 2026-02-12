@@ -7,6 +7,12 @@ class Pongogo < Formula
 
   depends_on "python@3.12"
 
+  # Skip Homebrew dylib ID fixup for Python native extensions.
+  # Python uses dlopen() (not Mach-O dyld), so rpath rewriting is
+  # unnecessary and fails on extensions with insufficient header
+  # padding (pydantic_core, cryptography).
+  skip_clean "libexec"
+
   def install
     python3 = "python3.12"
 
